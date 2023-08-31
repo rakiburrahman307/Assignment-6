@@ -17,17 +17,27 @@ const displayListItem = (allData) => {
 const getId = async (id) => {
     const res = await fetch(` https://openapi.programming-hero.com/api/videos/category/${id}`);
     const data = await res.json();
-    const cardData = data.data;
+    const cardData = data;
     viewAllCard(cardData);
 }
 const viewAllCard = (cardData) => {
     const cardContainer = document.getElementById('card-container-div');
     cardContainer.textContent = "";
+    const errorDiv = document.getElementById('error-container');
+    errorDiv.textContent = "";
 
-    cardData.forEach(data => {
-        console.log(data?.others?.views);
+    if (cardData.status === false) {
         const div = document.createElement('div');
-        div.classList = `card card-compact w-96 bg-base-100 shadow-xl`;
+        div.innerHTML = `
+        <img class="mx-auto mb-8" src="image/Icon.png" alt="Error">
+        <p class="text-center text-[#171717] text-3xl font-bold ">Oops!! Sorry, There is no content here</p>
+        `;
+        errorDiv.appendChild(div);
+    }
+    cardData.data.forEach(data => {
+        console.log(data);
+        const div = document.createElement('div');
+        div.classList = `card card-compact w-auto bg-base-200 shadow-xl px-2`;
 
         div.innerHTML = `
         
