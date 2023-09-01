@@ -1,51 +1,69 @@
-const loadData = async () => {
-    const res = await fetch('https://openapi.programming-hero.com/api/videos/categories');
-    const data = await res.json();
-    const allData = data.data;
-    displayListItem(allData);
-}
-const displayListItem = (allData) => {
-    const listUlDiv = document.getElementById('listUlDiv');
-    listUlDiv.textContent = "";
-    allData.forEach(data => {
-        const li = document.createElement('li');
-        li.classList = `list-none`;
-        li.innerHTML = `<a onclick="getId('${data?.category_id}')" class="cursor-pointer py-2 px-4 rounded-lg text-[#252525B3] text-lg bg-[#25252526] hover:bg-[#FF1F3D] active:bg-[#FF1F3D] hover:text-white focus:bg-[#FF1F3D] font-semibold duration-300">${data?.category}</a>`;
-        listUlDiv.appendChild(li);
-    });
-}
-const getId = async (id) => {
-    const res = await fetch(` https://openapi.programming-hero.com/api/videos/category/${id}`);
-    const data = await res.json();
-    const cardData = data;
-    viewAllCard(cardData);
-}
-const viewAllCard = (cardData) => {
-    const cardContainer = document.getElementById('card-container-div');
-    cardContainer.textContent = "";
-    const errorDiv = document.getElementById('error-container');
-    errorDiv.textContent = "";
 
-    if (cardData.status === false) {
-        const div = document.createElement('div');
-        div.innerHTML = `
+const loadData = async () => {
+  const res = await fetch('https://openapi.programming-hero.com/api/videos/categories');
+  const data = await res.json();
+  const allData = data.data;
+  displayListItem(allData);
+}
+
+const displayListItem = (allData) => {
+  const listUlDiv = document.getElementById('listUlDiv');
+  listUlDiv.textContent = "";
+  allData.forEach(data => {
+    const li = document.createElement('li');
+    li.classList = `list-none`;
+
+    li.innerHTML = `<a onclick="getId('${data?.category_id}')" class="cursor-pointer py-2 px-4 rounded-lg text-[#252525B3] text-lg bg-[#25252526] hover:bg-[#FF1F3D] active:bg-[#FF1F3D] hover:text-white focus:bg-[#FF1F3D] font-semibold duration-300">${data?.category}</a>`;
+    listUlDiv.appendChild(li);
+
+  });
+
+}
+
+
+const getId = async (id) => {
+  isSpinner(true);
+  const res = await fetch(` https://openapi.programming-hero.com/api/videos/category/${id}`);
+  const data = await res.json();
+  const cardData = data;
+  viewAllCard(cardData);
+
+}
+
+const viewAllCard = (cardData) => {
+
+  const cardContainer = document.getElementById('card-container-div');
+  cardContainer.textContent = "";
+  const errorDiv = document.getElementById('error-container');
+  errorDiv.textContent = "";
+  if (cardData.data.length === 0) {
+    const div = document.createElement('div');
+    div.innerHTML = `
         <img class="mx-auto mb-8" src="image/Icon.png" alt="Error">
         <p class="text-center text-[#171717] text-3xl font-bold ">Oops!! Sorry, There is no content here</p>
         `;
-        errorDiv.appendChild(div);
-    }
-    cardData.data.forEach(data => {
-        console.log(data);
-        const div = document.createElement('div');
-        div.classList = `card card-compact w-auto bg-base-200 shadow-xl px-2`;
+    errorDiv.appendChild(div);
+  }
+  cardData?.data.forEach(data => {
+    console.log(data.others.views);
+    const totalSeconds = `${data?.others?.posted_date}`;
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
 
-        div.innerHTML = `
+    const div = document.createElement('div');
+    div.classList = `card card-compact w-auto bg-base-200 shadow-xl px-2`;
+
+    div.innerHTML = `
         
-                            <figure><img class="h-56 px-2" src="${data?.thumbnail}" alt="Shoes" /></figure>
+                            <figure id="thumbnail" class="relative"><img class="h-56 px-2" src="${data?.thumbnail}" alt="Shoes" />
+                            ${data?.others?.posted_date ? ` <div class="badge badge-neutral bg-black absolute bottom-2 right-4">${hours} hrs ${minutes} min ago</div>` : ""}
+                            </figure>
+                            
                             <div class="flex px-4 mt-6 items-center gap-8">
                                 <div class="avatar">
                                     <div class="w-20 rounded-full">
-                                      <img src="${data?.authors[0]?.profile_picture || "No Profile Picture"}" />
+                                      <img src="${data?.authors[0]?.profile_picture || "No Profile Picture"}"/>
+                                      
                                     </div>
                                   </div>
                               <h2 class="card-title">${data?.title}</h2>
@@ -71,9 +89,28 @@ const viewAllCard = (cardData) => {
                             </div>
                        
         `;
-        cardContainer.appendChild(div);
+    cardContainer.appendChild(div);
+  });
+  isSpinner(false);
 
-    });
 
+}
+
+const blog = (event) => {
+  const btnText = event.innerText.toLowerCase();
+  const text = 'Blog';
+  if (btnText === text.toLowerCase()) {
+    window.location = "blog.html";
+    target = "_blank";
+    done = 1;
+  }
+}
+const isSpinner = (value) => {
+  const spinnerDiv = document.getElementById('spinner-div');
+  if (value) {
+    spinnerDiv.classList.remove('hidden');
+  } else {
+    spinnerDiv.classList.add('hidden');
+  }
 }
 loadData();
