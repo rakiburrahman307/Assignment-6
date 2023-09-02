@@ -75,7 +75,7 @@ const viewAllCard = (cardData) => {
                                   </div>
                               <h2 class="card-title">${data?.title}</h2>
                             </div>
-                            <div class="flex items-center justify-center gap-2 px-8 mb-4">
+                            <div class="flex items-center justify-center gap-2 px-6 mb-2">
                                 <h3 class="text-sm text-[#171717B3]">
                                 ${data?.authors[0]?.profile_name || "No Name Found"}</h3>
                                 ${data?.authors[0]?.verified ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
