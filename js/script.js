@@ -26,17 +26,16 @@ const getId = async (id) => {
   const res = await fetch(` https://openapi.programming-hero.com/api/videos/category/${id}`);
   const data = await res.json();
   const cardData = data;
-  viewAllCard(cardData);
+  sortViewByViews(cardData);
 
 }
 
 const viewAllCard = (cardData) => {
-
   const cardContainer = document.getElementById('card-container-div');
   cardContainer.textContent = "";
   const errorDiv = document.getElementById('error-container');
   errorDiv.textContent = "";
-  if (cardData.data.length === 0) {
+  if (cardData.length === 0) {
     const div = document.createElement('div');
     div.innerHTML = `
         <img class="mx-auto mb-8" src="image/Icon.png" alt="Error">
@@ -44,7 +43,7 @@ const viewAllCard = (cardData) => {
         `;
     errorDiv.appendChild(div);
   }
-  cardData?.data.forEach(data => {
+  cardData?.forEach(data => {
     console.log(data.others.views);
     const totalSeconds = `${data?.others?.posted_date}`;
     const hours = Math.floor(totalSeconds / 3600);
@@ -113,4 +112,12 @@ const isSpinner = (value) => {
     spinnerDiv.classList.add('hidden');
   }
 }
+
+function sortViewByViews(cardData) {
+  const sortData = cardData.data;
+  sortData.sort((a, b) => b.others.views.slice(0, 3) - a.others.views.slice(0, 3));
+  viewAllCard(sortData);
+}
+
+
 loadData();
