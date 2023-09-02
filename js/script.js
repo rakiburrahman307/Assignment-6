@@ -13,7 +13,7 @@ const displayListItem = (allData) => {
     const li = document.createElement('li');
     li.classList = `list-none`;
 
-    li.innerHTML = `<a onclick="getId('${data?.category_id}')" class="cursor-pointer py-2 px-4 rounded-lg text-[#252525B3] text-lg bg-[#25252526] hover:bg-[#FF1F3D] active:bg-[#FF1F3D] hover:text-white focus:bg-[#FF1F3D] font-semibold duration-300">${data?.category}</a>`;
+    li.innerHTML = `<a onclick="getId(${data?.category_id})" class="cursor-pointer py-2 px-4 rounded-lg text-[#252525B3] text-lg bg-[#25252526] hover:bg-[#FF1F3D] active:bg-[#FF1F3D] hover:text-white focus:bg-[#FF1F3D] font-semibold duration-300">${data?.category}</a>`;
     listUlDiv.appendChild(li);
 
   });
@@ -23,11 +23,18 @@ const displayListItem = (allData) => {
 
 const getId = async (id) => {
   isSpinner(true);
-  const res = await fetch(` https://openapi.programming-hero.com/api/videos/category/${id}`);
+  const api = `https://openapi.programming-hero.com/api/videos/category/${id === "sortViews" ? "1000" : id}`;
+  const res = await fetch(`${api}`);
   const data = await res.json();
-  const cardData = data;
-  sortViewByViews(cardData);
+  const cardData = data.data;
 
+  if (id === "sortViews") {
+    cardData.sort((a, b) => b.others.views.slice(0, 3) - a.others.views.slice(0, 3));
+    viewAllCard(cardData);
+  }
+  else {
+    viewAllCard(cardData);
+  }
 }
 
 const viewAllCard = (cardData) => {
@@ -44,7 +51,6 @@ const viewAllCard = (cardData) => {
     errorDiv.appendChild(div);
   }
   cardData?.forEach(data => {
-    console.log(data.others.views);
     const totalSeconds = `${data?.others?.posted_date}`;
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -111,12 +117,6 @@ const isSpinner = (value) => {
   } else {
     spinnerDiv.classList.add('hidden');
   }
-}
-
-function sortViewByViews(cardData) {
-  const sortData = cardData.data;
-  sortData.sort((a, b) => b.others.views.slice(0, 3) - a.others.views.slice(0, 3));
-  viewAllCard(sortData);
 }
 
 
