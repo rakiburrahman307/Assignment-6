@@ -58,7 +58,7 @@ const viewAllCard = (cardData) => {
     const minutes = Math.floor((totalSeconds % 3600) / 60);
 
     const div = document.createElement('div');
-    div.classList = `card card-compact w-auto bg-base-200 shadow-xl px-2`;
+    div.classList = `card card-compact w-auto bg-base-300 hover:drop-shadow-[0_35px_35px_rgba(0,0,0,0.35)]  duration-500 px-2`;
 
     div.innerHTML = `
         
@@ -66,9 +66,9 @@ const viewAllCard = (cardData) => {
                             ${data?.others?.posted_date ? ` <div class="badge badge-neutral bg-black absolute bottom-2 right-4">${hours} hrs ${minutes} min ago</div>` : ""}
                             </figure>
                             
-                            <div class="flex px-4 mt-6 items-center gap-8">
+                            <div class="flex px-4 mt-6 items-center gap-6">
                                 <div class="avatar">
-                                    <div class="w-20 rounded-full">
+                                    <div class="w-16 rounded-full">
                                       <img src="${data?.authors[0]?.profile_picture || "No Profile Picture"}"/>
                                       
                                     </div>
