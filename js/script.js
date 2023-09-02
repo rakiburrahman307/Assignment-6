@@ -13,7 +13,9 @@ const displayListItem = (allData) => {
     const li = document.createElement('li');
     li.classList = `list-none`;
 
-    li.innerHTML = `<a onclick="getId(${data?.category_id})" class="cursor-pointer py-2 px-4 rounded-lg text-[#252525B3] text-lg bg-[#25252526] hover:bg-[#FF1F3D] active:bg-[#FF1F3D] hover:text-white focus:bg-[#FF1F3D] font-semibold duration-300">${data?.category}</a>`;
+    li.innerHTML = `<button onclick="getId(${data?.category_id})" class="cursor-pointer py-2 px-4 rounded-lg text-[#252525B3] text-lg bg-[#25252526] hover:bg-[#FF1F3D] hover:text-white focus:outline-none focus:bg-[#FF1F3D] focus:text-white font-semibold duration-300 border-none">
+    ${data?.category}
+    </button>`;
     listUlDiv.appendChild(li);
 
   });
@@ -21,7 +23,7 @@ const displayListItem = (allData) => {
 }
 
 
-const getId = async (id) => {
+const getId = async (id = "1000") => {
   isSpinner(true);
   const api = `https://openapi.programming-hero.com/api/videos/category/${id === "sortViews" ? "1000" : id}`;
   const res = await fetch(`${api}`);
@@ -119,5 +121,5 @@ const isSpinner = (value) => {
   }
 }
 
-
+getId();
 loadData();
