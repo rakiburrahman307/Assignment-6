@@ -66,7 +66,7 @@ const viewAllCard = (cardData) => {
                             ${data?.others?.posted_date ? ` <div class="badge badge-neutral bg-black absolute bottom-2 right-4">${hours} hrs ${minutes} min ago</div>` : ""}
                             </figure>
                             
-                            <div class="flex px-4 mt-6 items-center gap-6">
+                            <div class="flex px-4 mt-6 justify-center items-center gap-6">
                                 <div class="avatar">
                                     <div class="w-16 rounded-full">
                                       <img src="${data?.authors[0]?.profile_picture || "No Profile Picture"}"/>
